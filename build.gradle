@@ -1,0 +1,70 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.6'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.epages.restdocs-api-spec' version '0.18.2'
+    id 'org.hidetake.swagger.generator' version '2.19.2'
+}
+
+group = 'kr.minigate'
+version = '0.0.1-SNAPSHOT'
+description = 'OrderSystem'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.assertj:assertj-core'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    swaggerUI 'org.webjars:swagger-ui:5.10.3'
+}
+
+openapi3 {
+    server = "http://localhost:8080"
+    title = "Order System API"
+    description = "Order System REST API Documentation"
+    version = "${project.version}"
+    format = "yaml"
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+task copySwaggerUI(type: Copy) {
+    dependsOn 'openapi3'
+    from "build/api-spec"
+    into "src/main/resources/static/swagger-ui"
+}
+
+bootJar {
+    dependsOn copySwaggerUI
+}
+
+jar {
+    enabled = false
+}
