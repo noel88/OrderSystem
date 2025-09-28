@@ -6,6 +6,8 @@ import kr.minigate.ordersystem.domain.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class PaymentQueryServiceImpl implements PaymentQueryService {
@@ -28,5 +30,13 @@ public class PaymentQueryServiceImpl implements PaymentQueryService {
         Payment payment = paymentRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 결제입니다"));
         return PaymentQuery.from(payment);
+    }
+
+    @Override
+    public List<PaymentQuery> getAllPayments() {
+        return paymentRepository.findAllByOrderByCreatedAtDesc()
+            .stream()
+            .map(PaymentQuery::from)
+            .toList();
     }
 }

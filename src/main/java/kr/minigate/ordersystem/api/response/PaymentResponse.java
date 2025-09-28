@@ -1,5 +1,6 @@
 package kr.minigate.ordersystem.api.response;
 
+import kr.minigate.ordersystem.application.dto.PaymentQuery;
 import kr.minigate.ordersystem.domain.Payment;
 import kr.minigate.ordersystem.domain.PaymentMethod;
 import kr.minigate.ordersystem.domain.PaymentStatus;
@@ -27,6 +28,16 @@ public class PaymentResponse {
         this.status = payment.getStatus();
         this.transactionId = payment.getTransactionId();
         this.createdAt = payment.getCreatedAt();
+    }
+
+    public PaymentResponse(PaymentQuery paymentQuery) {
+        this.id = paymentQuery.id();
+        this.orderId = paymentQuery.orderId();
+        this.amount = paymentQuery.amount();
+        this.paymentMethod = paymentQuery.paymentMethod();
+        this.status = paymentQuery.status();
+        this.transactionId = paymentQuery.transactionId();
+        this.createdAt = paymentQuery.createdAt();
     }
 
     public PaymentResponse(Long id, Long orderId, BigDecimal amount, PaymentMethod paymentMethod,

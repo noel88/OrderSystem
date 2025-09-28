@@ -18,13 +18,18 @@ public record OrderQuery(
     LocalDateTime createdAt
 ) {
     public static OrderQuery from(Order order) {
+        List<OrderItemQuery> orderItemQueries = order.getOrderItems() != null ?
+            order.getOrderItems().stream()
+                .map(OrderItemQuery::from)
+                .toList() : List.of();
+
         return new OrderQuery(
             order.getId(),
             order.getMember().getId(),
             order.getMember().getName(),
             order.getTotalAmount(),
             order.getStatus(),
-            List.of(), // OrderItems는 필요시 구현
+            orderItemQueries,
             order.getCreatedAt()
         );
     }

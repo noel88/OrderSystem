@@ -32,4 +32,12 @@ public class OrderQueryServiceImpl implements OrderQueryService {
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다"));
         return OrderQuery.from(order);
     }
+
+    @Override
+    public List<OrderQuery> getAllOrders() {
+        return orderRepository.findAllByOrderByCreatedAtDesc()
+            .stream()
+            .map(OrderQuery::from)
+            .toList();
+    }
 }
