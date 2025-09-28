@@ -35,4 +35,10 @@ public class Member extends BaseEntity {
         this.phone = phone;
         this.address = address;
     }
+
+    public void updateProfile(String name, String phone, String address) {
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+    }
 }

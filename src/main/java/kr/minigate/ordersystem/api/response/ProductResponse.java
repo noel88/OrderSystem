@@ -1,5 +1,6 @@
 package kr.minigate.ordersystem.api.response;
 
+import kr.minigate.ordersystem.application.dto.ProductQuery;
 import kr.minigate.ordersystem.domain.Product;
 import lombok.Getter;
 

@@ -1,5 +1,6 @@
 package kr.minigate.ordersystem.api.response;
 
+import kr.minigate.ordersystem.application.dto.MemberQuery;
 import kr.minigate.ordersystem.domain.Member;
 import lombok.Getter;
 
@@ -18,6 +19,14 @@ public class MemberResponse {
         this.email = member.getEmail();
         this.phone = member.getPhone();
         this.address = member.getAddress();
+    }
+
+    public MemberResponse(MemberQuery memberQuery) {
+        this.id = memberQuery.id();
+        this.name = memberQuery.name();
+        this.email = memberQuery.email();
+        this.phone = memberQuery.phone();
+        this.address = memberQuery.address();
     }
 
     public MemberResponse(Long id, String name, String email, String phone, String address) {

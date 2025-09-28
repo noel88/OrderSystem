@@ -36,11 +36,15 @@ public class OrderItem extends BaseEntity {
     private BigDecimal amount;
 
     @Builder
-    public OrderItem(Order order, Product product, Integer quantity, BigDecimal price) {
+    public OrderItem(Order order, Product product, Integer quantity, BigDecimal price, BigDecimal amount) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;
         this.price = price;
-        this.amount = price.multiply(BigDecimal.valueOf(quantity));
+        this.amount = amount != null ? amount : price.multiply(BigDecimal.valueOf(quantity));
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

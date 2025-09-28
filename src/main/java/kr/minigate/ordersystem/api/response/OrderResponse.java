@@ -1,5 +1,6 @@
 package kr.minigate.ordersystem.api.response;
 
+import kr.minigate.ordersystem.application.dto.OrderQuery;
 import kr.minigate.ordersystem.domain.Order;
 import kr.minigate.ordersystem.domain.OrderStatus;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class OrderResponse {
@@ -27,6 +29,24 @@ public class OrderResponse {
         this.status = order.getStatus();
         this.orderItems = List.of(); // TODO: OrderItem 변환
         this.createdAt = order.getCreatedAt();
+    }
+
+    public OrderResponse(OrderQuery orderQuery) {
+        this.id = orderQuery.id();
+        this.memberId = orderQuery.memberId();
+        this.memberName = orderQuery.memberName();
+        this.totalAmount = orderQuery.totalAmount();
+        this.status = orderQuery.status();
+        this.orderItems = orderQuery.orderItems().stream()
+            .map(item -> new OrderItemResponse(
+                item.productId(),
+                item.productName(),
+                item.quantity(),
+                item.price(),
+                item.amount()
+            ))
+            .collect(Collectors.toList());
+        this.createdAt = orderQuery.createdAt();
     }
 
     public OrderResponse(Long id, Long memberId, String memberName, BigDecimal totalAmount,

@@ -37,4 +37,19 @@ public class Product extends BaseEntity {
         this.price = price;
         this.stock = stock;
     }
+
+    public void decreaseStock(int quantity) {
+        if (this.stock < quantity) {
+            throw new IllegalArgumentException("재고가 부족합니다. 현재 재고: " + this.stock + ", 요청 수량: " + quantity);
+        }
+        this.stock -= quantity;
+    }
+
+    public void increaseStock(int quantity) {
+        this.stock += quantity;
+    }
+
+    public boolean hasEnoughStock(int quantity) {
+        return this.stock >= quantity;
+    }
 }

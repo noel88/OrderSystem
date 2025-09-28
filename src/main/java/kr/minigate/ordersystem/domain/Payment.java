@@ -44,4 +44,26 @@ public class Payment extends BaseEntity {
         this.transactionId = transactionId;
         this.status = PaymentStatus.COMPLETED;
     }
+
+    public void cancel() {
+        if (this.status == PaymentStatus.CANCELLED || this.status == PaymentStatus.REFUNDED) {
+            throw new IllegalStateException("이미 취소되거나 환불된 결제입니다");
+        }
+        this.status = PaymentStatus.CANCELLED;
+    }
+
+    public void refund(BigDecimal refundAmount) {
+        if (this.status == PaymentStatus.CANCELLED || this.status == PaymentStatus.REFUNDED) {
+            throw new IllegalStateException("이미 취소되거나 환불된 결제입니다");
+        }
+        if (refundAmount.compareTo(this.amount) > 0) {
+            throw new IllegalArgumentException("환불 금액이 결제 금액을 초과할 수 없습니다");
+        }
+        this.status = PaymentStatus.REFUNDED;
+        this.amount = this.amount.subtract(refundAmount);
+    }
+
+    public static String generateTransactionId() {
+        return "TXN_" + java.util.UUID.randomUUID().toString().substring(0, 8);
+    }
 }
