@@ -37,10 +37,11 @@ public class Payment extends BaseEntity {
     private String transactionId;
 
     @Builder
-    public Payment(Order order, BigDecimal amount, PaymentMethod paymentMethod) {
+    public Payment(Order order, BigDecimal amount, PaymentMethod paymentMethod, String transactionId) {
         this.order = order;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
+        this.transactionId = transactionId;
         this.status = PaymentStatus.COMPLETED;
     }
 }

@@ -1,0 +1,11 @@
+openapi: 3.0.1
+info:
+  title: Order System API
+  description: Order System REST API Documentation
+  version: 0.0.1-SNAPSHOT
+servers:
+- url: http://localhost:8080
+tags: []
+paths: {}
+components:
+  schemas: {}
