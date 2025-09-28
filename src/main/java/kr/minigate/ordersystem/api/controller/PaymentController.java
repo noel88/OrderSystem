@@ -46,6 +46,11 @@ public class PaymentController {
             PaymentQuery paymentQuery = paymentCommandService.processPayment(command);
             return new PaymentResponse(paymentQuery);
         } catch (IllegalArgumentException e) {
+            // 주문을 찾을 수 없는 경우 NOT_FOUND 반환
+            if (e.getMessage().contains("존재하지 않는 주문")) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            }
+            // 중복 결제 등 기타 경우 BAD_REQUEST 반환
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

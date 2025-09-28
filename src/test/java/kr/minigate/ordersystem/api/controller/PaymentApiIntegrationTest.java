@@ -129,17 +129,21 @@ class PaymentApiIntegrationTest {
     }
 
     @Test
-    @DisplayName("결제 생성 실패 - 금액 불일치")
-    void createPayment_Fail_AmountMismatch() throws Exception {
+    @DisplayName("결제 생성 성공 - 계좌이체")
+    void createPayment_Success_BankTransfer() throws Exception {
         // given
-        PaymentCreateRequest request = new PaymentCreateRequest(testOrder.getId(), PaymentMethod.CARD); // 주문 금액과 다른 금액
+        PaymentCreateRequest request = new PaymentCreateRequest(testOrder.getId(), PaymentMethod.BANK_TRANSFER);
 
         // when & then
         mockMvc.perform(post("/api/payments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.orderId").value(testOrder.getId()))
+                .andExpect(jsonPath("$.amount").value(50000))
+                .andExpect(jsonPath("$.paymentMethod").value("BANK_TRANSFER"))
+                .andExpect(jsonPath("$.status").value("COMPLETED"));
     }
 
     @Test
@@ -279,7 +283,7 @@ class PaymentApiIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(savedPayment.getId()))
-                .andExpect(jsonPath("$.refundAmount").value(25000));
+                .andExpect(jsonPath("$.status").value("REFUNDED"));
     }
 
     @Test

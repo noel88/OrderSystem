@@ -49,6 +49,11 @@ public class OrderController {
             OrderQuery orderQuery = orderCommandService.createOrder(command);
             return new OrderResponse(orderQuery);
         } catch (IllegalArgumentException e) {
+            // 회원이나 상품을 찾을 수 없는 경우 NOT_FOUND 반환
+            if (e.getMessage().contains("존재하지 않는 회원") || e.getMessage().contains("존재하지 않는 상품")) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            }
+            // 재고 부족 등 기타 경우 BAD_REQUEST 반환
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
